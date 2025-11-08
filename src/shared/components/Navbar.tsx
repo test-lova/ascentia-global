@@ -19,6 +19,7 @@ export function Navbar() {
     { key: 'blog', href: '/blog', isRoute: true },
     { key: 'gallery', href: '/gallery', isRoute: true },
     { key: 'testimonials', href: '/testimonials', isRoute: true },
+    { key: 'resume', href: '/resume', isRoute: true },
   ];
 
   return (

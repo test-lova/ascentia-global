@@ -7,6 +7,7 @@
     "blog": "Blog",
     "gallery": "Gallery",
     "testimonials": "Testimonials",
+    "resume": "Resume",
     "team": "Team",
     "contact": "Contact"
   },
@@ -58,6 +59,10 @@
   "testimonials": {
     "title": "Student Success Stories",
     "subtitle": "Hear from students who achieved their dreams"
+  },
+  "resume": {
+    "title": "Submit Your Resume",
+    "subtitle": "Create and submit your professional resume for employment opportunities"
   },
   "contact": {
     "title": "Get in Touch",

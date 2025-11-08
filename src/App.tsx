@@ -14,6 +14,7 @@ import AboutPage from "./features/about/AboutPage";
 import BlogPage from "./features/blog/BlogPage";
 import GalleryPage from "./features/gallery/GalleryPage";
 import TestimonialsPage from "./features/testimonials/TestimonialsPage";
+import ResumeGeneratorPage from "./features/resume/ResumeGeneratorPage";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/blog" element={<BlogPage />} />
             <Route path="/gallery" element={<GalleryPage />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
+            <Route path="/resume" element={<ResumeGeneratorPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

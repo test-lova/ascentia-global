@@ -488,6 +488,42 @@ export const testimonialsService = {
 };
 
 // ============================================================================
+// Resume API Services
+// ============================================================================
+
+export const resumeService = {
+  /**
+   * Submit a new resume
+   */
+  submitResume: async (resumeData: FormData): Promise<Resume> => {
+    const response = await fetch(`${API_BASE_URL}/resume/resumes/`, {
+      method: 'POST',
+      body: resumeData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Resume submission failed: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Get all resumes (admin/staff only typically)
+   */
+  getResumes: async (options?: RequestOptions): Promise<PaginatedResponse<Resume> | Resume[]> => {
+    return get<PaginatedResponse<Resume> | Resume[]>('/resume/resumes/', options);
+  },
+
+  /**
+   * Get a single resume by ID
+   */
+  getResume: async (id: number): Promise<Resume> => {
+    return get<Resume>(`/resume/resumes/${id}/`);
+  },
+};
+
+// ============================================================================
 // Combined API Service Export
 // ============================================================================
 
@@ -506,6 +542,7 @@ export const apiService = {
   resources: resourcesService,
   services: servicesService,
   testimonials: testimonialsService,
+  resume: resumeService,
 };
 
 // ============================================================================
