@@ -6,14 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { I18nProvider } from "./app/providers/I18nProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Services from "./pages/Services";
-import ServiceDetail from "./pages/ServiceDetail";
-import Destinations from "./pages/Destinations";
-import DestinationDetail from "./pages/DestinationDetail";
-import About from "./pages/About";
-import Blog from "./pages/Blog";
-import Gallery from "./pages/Gallery";
-import Testimonials from "./pages/Testimonials";
+import ServicesPage from "./features/services/ServicesPage";
+import ServiceDetailPage from "./features/services/ServiceDetailPage";
+import DestinationsPage from "./features/destinations/DestinationsPage";
+import DestinationDetailPage from "./features/destinations/DestinationDetailPage";
+import AboutPage from "./features/about/AboutPage";
+import BlogPage from "./features/blog/BlogPage";
+import GalleryPage from "./features/gallery/GalleryPage";
+import TestimonialsPage from "./features/testimonials/TestimonialsPage";
 
 const queryClient = new QueryClient();
 
@@ -26,14 +26,14 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/services/:id" element={<ServiceDetail />} />
-            <Route path="/destinations" element={<Destinations />} />
-            <Route path="/destinations/:id" element={<DestinationDetail />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/testimonials" element={<Testimonials />} />
+            <Route path="/services" element={<ServicesPage />} />
+            <Route path="/services/:id" element={<ServiceDetailPage />} />
+            <Route path="/destinations" element={<DestinationsPage />} />
+            <Route path="/destinations/:id" element={<DestinationDetailPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+            <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
