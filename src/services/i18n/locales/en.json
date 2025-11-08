@@ -4,8 +4,18 @@
     "about": "About",
     "services": "Services",
     "destinations": "Destinations",
+    "blog": "Blog",
+    "gallery": "Gallery",
+    "testimonials": "Testimonials",
     "team": "Team",
     "contact": "Contact"
+  },
+  "common": {
+    "learnMore": "Learn More",
+    "readMore": "Read More",
+    "exploreMore": "Explore More",
+    "back": "Back",
+    "notFound": "Not Found"
   },
   "hero": {
     "title": "Your Journey to",
@@ -21,11 +31,25 @@
   },
   "services": {
     "title": "Our Services",
-    "subtitle": "Comprehensive support for your education journey"
+    "subtitle": "Comprehensive services for your study abroad journey",
+    "description": "Comprehensive services for your study abroad journey"
+  },
+  "blog": {
+    "title": "Blog & Resources",
+    "subtitle": "Latest updates and insights about studying abroad"
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "subtitle": "Moments from our student success stories and events"
   },
   "destinations": {
     "title": "Study Destinations",
-    "subtitle": "Explore top universities worldwide"
+    "subtitle": "Explore top study destinations around the world",
+    "description": "Explore top study destinations around the world",
+    "overview": "Overview",
+    "education": "Education System",
+    "requirements": "Requirements",
+    "lifestyle": "Lifestyle & Culture"
   },
   "team": {
     "title": "Meet Our Team",

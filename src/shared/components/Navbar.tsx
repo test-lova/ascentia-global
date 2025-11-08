@@ -12,21 +12,14 @@ export function Navbar() {
   const { t } = useTranslation();
 
   const navItems = [
-    { key: 'home', href: '#hero' },
-    { key: 'about', href: '#about' },
-    { key: 'services', href: '#services' },
-    { key: 'destinations', href: '#destinations' },
-    { key: 'team', href: '#team' },
-    { key: 'contact', href: '#contact' },
+    { key: 'home', href: '/', isRoute: true },
+    { key: 'about', href: '/about', isRoute: true },
+    { key: 'services', href: '/services', isRoute: true },
+    { key: 'destinations', href: '/destinations', isRoute: true },
+    { key: 'blog', href: '/blog', isRoute: true },
+    { key: 'gallery', href: '/gallery', isRoute: true },
+    { key: 'testimonials', href: '/testimonials', isRoute: true },
   ];
-
-  const scrollToSection = (href: string) => {
-    setIsOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <nav className="fixed top-0 w-full bg-background/80 backdrop-blur-md z-50 border-b border-border">
@@ -43,13 +36,13 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.key}
-                onClick={() => scrollToSection(item.href)}
+                to={item.href}
                 className="text-foreground/80 hover:text-primary transition-colors"
               >
                 {t(`nav.${item.key}`)}
-              </button>
+              </Link>
             ))}
           </div>
 
@@ -78,13 +71,14 @@ export function Navbar() {
             >
               <div className="py-4 space-y-2">
                 {navItems.map((item) => (
-                  <button
+                  <Link
                     key={item.key}
-                    onClick={() => scrollToSection(item.href)}
+                    to={item.href}
+                    onClick={() => setIsOpen(false)}
                     className="block w-full text-left px-4 py-2 text-foreground/80 hover:text-primary hover:bg-muted rounded-md transition-colors"
                   >
                     {t(`nav.${item.key}`)}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </motion.div>
