@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "destinations": "Destinations",
+    "team": "Team",
+    "contact": "Contact"
+  },
+  "hero": {
+    "title": "Your Journey to",
+    "titleHighlight": "Global Education",
+    "subtitle": "Expert guidance for studying abroad. We help you achieve your dreams of international education.",
+    "cta": "Get Started",
+    "learnMore": "Learn More"
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "Your trusted partner in education consulting",
+    "description": "We provide comprehensive guidance for students aspiring to study abroad, from university selection to visa processing."
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Comprehensive support for your education journey"
+  },
+  "destinations": {
+    "title": "Study Destinations",
+    "subtitle": "Explore top universities worldwide"
+  },
+  "team": {
+    "title": "Meet Our Team",
+    "subtitle": "Expert counselors dedicated to your success"
+  },
+  "testimonials": {
+    "title": "Student Success Stories",
+    "subtitle": "Hear from students who achieved their dreams"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Start your journey today",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "message": "Your Message",
+    "submit": "Send Message"
+  },
+  "footer": {
+    "description": "Your trusted partner for international education",
+    "quickLinks": "Quick Links",
+    "contactInfo": "Contact Information",
+    "followUs": "Follow Us",
+    "rights": "All rights reserved"
+  }
+}

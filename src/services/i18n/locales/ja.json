@@ -1,0 +1,54 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "about": "私たちについて",
+    "services": "サービス",
+    "destinations": "留学先",
+    "team": "チーム",
+    "contact": "お問い合わせ"
+  },
+  "hero": {
+    "title": "あなたの旅へ",
+    "titleHighlight": "グローバル教育",
+    "subtitle": "海外留学の専門家によるガイダンス。国際教育の夢を実現するお手伝いをします。",
+    "cta": "始めましょう",
+    "learnMore": "詳細を見る"
+  },
+  "about": {
+    "title": "私たちについて",
+    "subtitle": "教育コンサルティングの信頼できるパートナー",
+    "description": "大学選択からビザ申請まで、海外留学を目指す学生に包括的なガイダンスを提供します。"
+  },
+  "services": {
+    "title": "私たちのサービス",
+    "subtitle": "あなたの教育の旅への包括的なサポート"
+  },
+  "destinations": {
+    "title": "留学先",
+    "subtitle": "世界のトップ大学を探索"
+  },
+  "team": {
+    "title": "チームメンバー",
+    "subtitle": "あなたの成功に専念する専門カウンセラー"
+  },
+  "testimonials": {
+    "title": "学生の成功事例",
+    "subtitle": "夢を実現した学生の声"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "subtitle": "今日から始めましょう",
+    "name": "フルネーム",
+    "email": "メールアドレス",
+    "phone": "電話番号",
+    "message": "メッセージ",
+    "submit": "送信"
+  },
+  "footer": {
+    "description": "国際教育の信頼できるパートナー",
+    "quickLinks": "クイックリンク",
+    "contactInfo": "お問い合わせ情報",
+    "followUs": "フォローする",
+    "rights": "全著作権所有"
+  }
+}
