@@ -16,7 +16,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Upload, User, Briefcase, GraduationCap, FileText, Plus, Trash2 } from 'lucide-react';
+import { Loader2, Upload, User, Briefcase, GraduationCap, FileText, Plus, Trash2, Download } from 'lucide-react';
+import { generateResumePDF } from '@/utils/pdfGenerator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const educationEntrySchema = z.object({
@@ -126,37 +127,68 @@ export default function ResumeGeneratorPage() {
     setIsSubmitting(true);
 
     try {
-      const formData = new FormData();
-      
-      // Add all text fields
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          // Handle arrays (education_history, work_history)
-          if (Array.isArray(value)) {
-            formData.append(key, JSON.stringify(value));
-          } else {
-            formData.append(key, String(value));
-          }
-        }
+      // Generate and download PDF
+      generateResumePDF({
+        first_name: data.first_name,
+        middle_name: data.middle_name,
+        last_name: data.last_name,
+        date_of_birth: data.date_of_birth,
+        gender: data.gender,
+        email: data.email,
+        address: data.address,
+        education_history: data.education_history as Array<{year: string; month: string; description: string}>,
+        work_history: data.work_history as Array<{year: string; month: string; description: string}> | undefined,
+        licenses: data.licenses,
+        skills: data.skills,
+        motivation: data.motivation,
+        strengths: data.strengths,
+        weaknesses: data.weaknesses,
+        hobbies: data.hobbies,
+        future_dream: data.future_dream,
+        spouse: data.spouse,
+        height: data.height,
+        weight: data.weight,
+        blood_type: data.blood_type,
+        imagePreview,
       });
-
-      // Add image
-      formData.append('image', imageFile);
-
-      await resumeService.submitResume(formData);
 
       toast({
         title: 'Success!',
-        description: 'Your resume has been submitted successfully.',
+        description: 'Your resume PDF has been generated and downloaded.',
       });
+
+      // Also submit to API if backend is available
+      try {
+        const formData = new FormData();
+        
+        // Add all text fields
+        Object.entries(data).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            // Handle arrays (education_history, work_history)
+            if (Array.isArray(value)) {
+              formData.append(key, JSON.stringify(value));
+            } else {
+              formData.append(key, String(value));
+            }
+          }
+        });
+
+        // Add image
+        formData.append('image', imageFile);
+
+        await resumeService.submitResume(formData);
+      } catch (apiError) {
+        console.log('API submission failed (backend may not be configured):', apiError);
+        // This is fine - PDF was still generated
+      }
 
       // Redirect after success
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
-      console.error('Resume submission error:', error);
+      console.error('Resume generation error:', error);
       toast({
         title: 'Error',
-        description: 'Failed to submit resume. Please try again.',
+        description: 'Failed to generate resume PDF. Please try again.',
         variant: 'destructive',
       });
     } finally {
@@ -663,8 +695,8 @@ export default function ResumeGeneratorPage() {
                     </>
                   ) : (
                     <>
-                      <Upload className="mr-2 h-4 w-4" />
-                      Submit Resume
+                      <Download className="mr-2 h-4 w-4" />
+                      Generate & Download PDF
                     </>
                   )}
                 </Button>
