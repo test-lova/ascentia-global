@@ -9,6 +9,16 @@ interface PopupModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// Fallback popup data when API is not available
+const FALLBACK_POPUP: Popup = {
+  id: 1,
+  image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=1200&h=800&fit=crop',
+  video: null,
+  is_active: true,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+};
+
 export function PopupModal({ open, onOpenChange }: PopupModalProps) {
   const [popup, setPopup] = useState<Popup | null>(null);
   const [loading, setLoading] = useState(true);
@@ -19,9 +29,9 @@ export function PopupModal({ open, onOpenChange }: PopupModalProps) {
         const data = await homeService.getActivePopup();
         setPopup(data);
       } catch (error) {
-        console.error('Failed to fetch popup:', error);
-        // If API fails, don't show popup
-        setPopup(null);
+        console.error('Failed to fetch popup, using fallback:', error);
+        // Use fallback data when API fails
+        setPopup(FALLBACK_POPUP);
       } finally {
         setLoading(false);
       }
