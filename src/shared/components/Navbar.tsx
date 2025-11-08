@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { LanguageToggle } from './LanguageToggle';
 import { cn } from '@/lib/utils';
 
-export function Navbar() {
+interface NavbarProps {
+  onHomeClick?: () => void;
+}
+
+export function Navbar({ onHomeClick }: NavbarProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const { t } = useTranslation();
+  const location = useLocation();
 
   const navItems = [
     { key: 'home', href: '/', isRoute: true },
@@ -36,15 +41,34 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.key}
-                to={item.href}
-                className="text-foreground/80 hover:text-primary transition-colors"
-              >
-                {t(`nav.${item.key}`)}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              if (item.key === 'home') {
+                return (
+                  <Link
+                    key={item.key}
+                    to={item.href}
+                    onClick={(e) => {
+                      if (location.pathname === '/' && onHomeClick) {
+                        e.preventDefault();
+                        onHomeClick();
+                      }
+                    }}
+                    className="text-foreground/80 hover:text-primary transition-colors"
+                  >
+                    {t(`nav.${item.key}`)}
+                  </Link>
+                );
+              }
+              return (
+                <Link
+                  key={item.key}
+                  to={item.href}
+                  className="text-foreground/80 hover:text-primary transition-colors"
+                >
+                  {t(`nav.${item.key}`)}
+                </Link>
+              );
+            })}
           </div>
 
           {/* Language Toggle & Mobile Menu */}
@@ -71,16 +95,36 @@ export function Navbar() {
               className="md:hidden overflow-hidden"
             >
               <div className="py-4 space-y-2">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.key}
-                    to={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className="block w-full text-left px-4 py-2 text-foreground/80 hover:text-primary hover:bg-muted rounded-md transition-colors"
-                  >
-                    {t(`nav.${item.key}`)}
-                  </Link>
-                ))}
+                {navItems.map((item) => {
+                  if (item.key === 'home') {
+                    return (
+                      <Link
+                        key={item.key}
+                        to={item.href}
+                        onClick={(e) => {
+                          setIsOpen(false);
+                          if (location.pathname === '/' && onHomeClick) {
+                            e.preventDefault();
+                            onHomeClick();
+                          }
+                        }}
+                        className="block w-full text-left px-4 py-2 text-foreground/80 hover:text-primary hover:bg-muted rounded-md transition-colors"
+                      >
+                        {t(`nav.${item.key}`)}
+                      </Link>
+                    );
+                  }
+                  return (
+                    <Link
+                      key={item.key}
+                      to={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className="block w-full text-left px-4 py-2 text-foreground/80 hover:text-primary hover:bg-muted rounded-md transition-colors"
+                    >
+                      {t(`nav.${item.key}`)}
+                    </Link>
+                  );
+                })}
               </div>
             </motion.div>
           )}
