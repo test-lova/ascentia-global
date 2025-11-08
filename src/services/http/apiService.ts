@@ -37,7 +37,7 @@ import type {
 // Configuration
 // ============================================================================
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || process.env.REACT_APP_API_URL || '/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1';
 
 interface RequestOptions {
   params?: Record<string, string | number | boolean>;
