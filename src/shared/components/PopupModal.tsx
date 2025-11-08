@@ -20,6 +20,8 @@ export function PopupModal({ open, onOpenChange }: PopupModalProps) {
         setPopup(data);
       } catch (error) {
         console.error('Failed to fetch popup:', error);
+        // If API fails, don't show popup
+        setPopup(null);
       } finally {
         setLoading(false);
       }
