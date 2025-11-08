@@ -1,31 +1,65 @@
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { CheckCircle2, Target, Eye, Award } from 'lucide-react';
-
-const features = [
-  {
-    icon: Target,
-    titleKey: 'mission',
-    descKey: 'missionDesc',
-  },
-  {
-    icon: Eye,
-    titleKey: 'vision',
-    descKey: 'visionDesc',
-  },
-  {
-    icon: Award,
-    titleKey: 'values',
-    descKey: 'valuesDesc',
-  },
-];
+import { aboutService } from '@/services/http/apiService';
+import type { About, Consultancy } from '@/shared/types/api';
 
 export function AboutSection() {
   const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  
+  const [about, setAbout] = useState<About | null>(null);
+  const [consultancy, setConsultancy] = useState<Consultancy | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [aboutData, consultancyData] = await Promise.all([
+          aboutService.getAbout(),
+          aboutService.getConsultancy(),
+        ]);
+        setAbout(aboutData);
+        setConsultancy(consultancyData);
+      } catch (error) {
+        console.error('Error fetching about data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const features = [
+    {
+      icon: Target,
+      title: 'Mission',
+      items: about?.mission || [],
+    },
+    {
+      icon: Eye,
+      title: 'Vision',
+      items: about?.vision || [],
+    },
+    {
+      icon: Award,
+      title: 'Values',
+      items: about?.values || [],
+    },
+  ];
+
+  if (loading) {
+    return (
+      <section id="about" className="py-24 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center">Loading...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="about" ref={ref} className="py-24 bg-muted/30">
@@ -51,12 +85,15 @@ export function AboutSection() {
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20" />
-              <img
-                src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2000"
-                alt="Students studying"
-                className="w-full h-full object-cover"
-              />
+              {about?.image ? (
+                <img
+                  src={about.image}
+                  alt="About us"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20" />
+              )}
             </div>
           </motion.div>
 
@@ -66,29 +103,21 @@ export function AboutSection() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="space-y-6"
           >
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {t('about.description')}
-            </p>
+            {about?.story && (
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                {about.story}
+              </p>
+            )}
 
-            <div className="space-y-4">
-              {[
-                'Expert counseling from experienced professionals',
-                'Personalized university selection guidance',
-                'Complete visa and documentation support',
-                'Test preparation assistance',
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                  className="flex items-start gap-3"
-                >
+            {consultancy?.why_choose_us && (
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold">Why Choose Us</h3>
+                <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
-                  <span className="text-foreground">{item}</span>
-                </motion.div>
-              ))}
-            </div>
+                  <span className="text-foreground">{consultancy.why_choose_us}</span>
+                </div>
+              </div>
+            )}
           </motion.div>
         </div>
 
@@ -106,10 +135,15 @@ export function AboutSection() {
               <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
                 <feature.icon className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2 capitalize">{feature.titleKey}</h3>
-              <p className="text-muted-foreground">
-                To empower students with opportunities for world-class education and career success.
-              </p>
+              <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+              <ul className="space-y-2">
+                {feature.items.map((item, idx) => (
+                  <li key={idx} className="text-muted-foreground flex items-start gap-2">
+                    <span className="text-primary mt-1">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             </motion.div>
           ))}
         </div>

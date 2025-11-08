@@ -1,51 +1,53 @@
 import { motion, useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { MapPin } from 'lucide-react';
-
-const destinations = [
-  {
-    name: 'United States',
-    flag: '🇺🇸',
-    universities: '500+',
-    image: 'https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?q=80&w=2000',
-  },
-  {
-    name: 'United Kingdom',
-    flag: '🇬🇧',
-    universities: '300+',
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?q=80&w=2000',
-  },
-  {
-    name: 'Australia',
-    flag: '🇦🇺',
-    universities: '200+',
-    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?q=80&w=2000',
-  },
-  {
-    name: 'Canada',
-    flag: '🇨🇦',
-    universities: '250+',
-    image: 'https://images.unsplash.com/photo-1517935706615-2717063c2225?q=80&w=2000',
-  },
-  {
-    name: 'Japan',
-    flag: '🇯🇵',
-    universities: '150+',
-    image: 'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?q=80&w=2000',
-  },
-  {
-    name: 'Germany',
-    flag: '🇩🇪',
-    universities: '180+',
-    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?q=80&w=2000',
-  },
-];
+import { destinationsService } from '@/services/http/apiService';
+import type { Destination } from '@/shared/types/api';
 
 export function DestinationsSection() {
   const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  
+  const [destinations, setDestinations] = useState<Destination[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const data = await destinationsService.getDestinations();
+        const destinationsArray = Array.isArray(data) ? data : (data as { results: Destination[] }).results;
+        setDestinations(destinationsArray);
+      } catch (error) {
+        console.error('Error fetching destinations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="destinations" className="py-24 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center">Loading destinations...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (destinations.length === 0) {
+    return (
+      <section id="destinations" className="py-24 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="text-center text-muted-foreground">No destinations available</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="destinations" ref={ref} className="py-24 bg-muted/30">
@@ -67,7 +69,7 @@ export function DestinationsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {destinations.map((destination, index) => (
             <motion.div
-              key={index}
+              key={destination.id}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -76,23 +78,34 @@ export function DestinationsSection() {
             >
               {/* Image */}
               <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={destination.image}
-                  alt={destination.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
+                {destination.image ? (
+                  <img
+                    src={destination.image}
+                    alt={destination.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 
-                {/* Flag */}
-                <div className="absolute top-4 right-4 text-4xl">{destination.flag}</div>
+                {/* Flag or Icon */}
+                {destination.flag && (
+                  <div className="absolute top-4 right-4">
+                    <img src={destination.flag} alt={`${destination.name} flag`} className="h-10 w-15 object-cover rounded shadow-lg" />
+                  </div>
+                )}
               </div>
 
               {/* Content */}
               <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                 <h3 className="text-2xl font-bold mb-2">{destination.name}</h3>
+                {destination.description && (
+                  <p className="text-sm text-white/90 mb-2 line-clamp-2">{destination.description}</p>
+                )}
                 <div className="flex items-center gap-2 text-sm">
                   <MapPin className="h-4 w-4" />
-                  <span>{destination.universities} Universities</span>
+                  <span>Study Destination</span>
                 </div>
               </div>
 

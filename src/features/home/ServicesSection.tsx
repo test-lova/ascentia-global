@@ -1,45 +1,53 @@
 import { motion, useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useRef } from 'react';
-import { GraduationCap, FileText, Plane, BookOpen, Users, Globe } from 'lucide-react';
-
-const services = [
-  {
-    icon: Users,
-    title: 'Career Counseling',
-    description: 'Professional guidance to help you choose the right career path and university.',
-  },
-  {
-    icon: GraduationCap,
-    title: 'University Selection',
-    description: 'Expert assistance in selecting universities that match your profile and goals.',
-  },
-  {
-    icon: FileText,
-    title: 'Application Support',
-    description: 'Complete support for university applications and documentation.',
-  },
-  {
-    icon: BookOpen,
-    title: 'Test Preparation',
-    description: 'IELTS, TOEFL, SAT, GRE preparation courses and guidance.',
-  },
-  {
-    icon: Plane,
-    title: 'Visa Assistance',
-    description: 'Comprehensive visa processing and interview preparation support.',
-  },
-  {
-    icon: Globe,
-    title: 'Pre-Departure',
-    description: 'Orientation sessions and guidance for life abroad.',
-  },
-];
+import { useRef, useEffect, useState } from 'react';
+import { GraduationCap } from 'lucide-react';
+import { servicesService } from '@/services/http/apiService';
+import type { Service } from '@/shared/types/api';
 
 export function ServicesSection() {
   const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const data = await servicesService.getServices();
+        const servicesArray = Array.isArray(data) ? data : (data as { results: Service[] }).results;
+        setServices(servicesArray);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="services" className="py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center">Loading services...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (services.length === 0) {
+    return (
+      <section id="services" className="py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center text-muted-foreground">No services available</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="services" ref={ref} className="py-24">
@@ -61,7 +69,7 @@ export function ServicesSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <motion.div
-              key={index}
+              key={service.id}
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -73,11 +81,13 @@ export function ServicesSection() {
               
               <div className="relative z-10">
                 <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <service.icon className="h-7 w-7 text-primary-foreground" />
+                  <GraduationCap className="h-7 w-7 text-primary-foreground" />
                 </div>
                 
-                <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                <p className="text-muted-foreground">{service.description}</p>
+                <h3 className="text-xl font-semibold mb-3">{service.name}</h3>
+                {service.description && (
+                  <p className="text-muted-foreground">{service.description}</p>
+                )}
               </div>
             </motion.div>
           ))}

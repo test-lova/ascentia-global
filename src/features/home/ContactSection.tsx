@@ -1,28 +1,72 @@
 import { motion, useInView } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { aboutService } from '@/services/http/apiService';
+import type { Consultancy } from '@/shared/types/api';
+import { z } from 'zod';
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required').max(100),
+  email: z.string().trim().email('Invalid email address').max(255),
+  phone: z.string().trim().min(1, 'Phone is required').max(20),
+  message: z.string().trim().min(1, 'Message is required').max(1000),
+});
 
 export function ContactSection() {
   const { t } = useTranslation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [consultancy, setConsultancy] = useState<Consultancy | null>(null);
+
+  useEffect(() => {
+    const fetchConsultancy = async () => {
+      try {
+        const data = await aboutService.getConsultancy();
+        setConsultancy(data);
+      } catch (error) {
+        console.error('Error fetching consultancy info:', error);
+      }
+    };
+
+    fetchConsultancy();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast.success('Message sent successfully! We will get back to you soon.');
-    setIsSubmitting(false);
-    (e.target as HTMLFormElement).reset();
+    const formData = new FormData(e.currentTarget);
+    const data = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      phone: formData.get('phone') as string,
+      message: formData.get('message') as string,
+    };
+
+    try {
+      // Validate input
+      contactSchema.parse(data);
+      
+      // Simulate form submission (replace with actual API call)
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      toast.success('Message sent successfully! We will get back to you soon.');
+      (e.target as HTMLFormElement).reset();
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+      } else {
+        toast.error('Failed to send message. Please try again.');
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -53,44 +97,63 @@ export function ContactSection() {
             <div>
               <h3 className="text-2xl font-semibold mb-6">Get in Touch</h3>
               <p className="text-muted-foreground mb-8">
-                Have questions about studying abroad? Our team is here to help you every step of the way.
+                {consultancy?.description || 'Have questions about studying abroad? Our team is here to help you every step of the way.'}
               </p>
             </div>
 
             <div className="space-y-6">
-              {[
-                {
-                  icon: Mail,
-                  label: 'Email',
-                  value: 'info@educonsult.com',
-                },
-                {
-                  icon: Phone,
-                  label: 'Phone',
-                  value: '+977 123-456-7890',
-                },
-                {
-                  icon: MapPin,
-                  label: 'Address',
-                  value: 'Kathmandu, Nepal',
-                },
-              ].map((item, index) => (
+              {consultancy?.email && (
                 <motion.div
-                  key={index}
                   initial={{ opacity: 0, x: -20 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
                   className="flex items-start gap-4"
                 >
                   <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <item.icon className="h-6 w-6 text-primary" />
+                    <Mail className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">{item.label}</h4>
-                    <p className="text-muted-foreground">{item.value}</p>
+                    <h4 className="font-semibold mb-1">Email</h4>
+                    <p className="text-muted-foreground">{consultancy.email}</p>
                   </div>
                 </motion.div>
-              ))}
+              )}
+
+              {(consultancy?.phone_number || consultancy?.telephone_number) && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                  className="flex items-start gap-4"
+                >
+                  <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Phone className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Phone</h4>
+                    <p className="text-muted-foreground">
+                      {consultancy.phone_number || consultancy.telephone_number}
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+
+              {consultancy?.address && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                  className="flex items-start gap-4"
+                >
+                  <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="h-6 w-6 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Address</h4>
+                    <p className="text-muted-foreground">{consultancy.address}</p>
+                  </div>
+                </motion.div>
+              )}
             </div>
           </motion.div>
 
@@ -103,8 +166,10 @@ export function ContactSection() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Input
+                  name="name"
                   placeholder={t('contact.name')}
                   required
+                  maxLength={100}
                   className="h-12"
                 />
               </div>
@@ -112,8 +177,10 @@ export function ContactSection() {
               <div>
                 <Input
                   type="email"
+                  name="email"
                   placeholder={t('contact.email')}
                   required
+                  maxLength={255}
                   className="h-12"
                 />
               </div>
@@ -121,16 +188,20 @@ export function ContactSection() {
               <div>
                 <Input
                   type="tel"
+                  name="phone"
                   placeholder={t('contact.phone')}
                   required
+                  maxLength={20}
                   className="h-12"
                 />
               </div>
 
               <div>
                 <Textarea
+                  name="message"
                   placeholder={t('contact.message')}
                   required
+                  maxLength={1000}
                   className="min-h-[150px]"
                 />
               </div>

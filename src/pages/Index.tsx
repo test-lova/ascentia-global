@@ -4,6 +4,7 @@ import { HeroSection } from '@/features/home/HeroSection';
 import { AboutSection } from '@/features/home/AboutSection';
 import { ServicesSection } from '@/features/home/ServicesSection';
 import { DestinationsSection } from '@/features/home/DestinationsSection';
+import { TeamSection } from '@/features/home/TeamSection';
 import { ContactSection } from '@/features/home/ContactSection';
 
 const Index = () => {
@@ -15,6 +16,7 @@ const Index = () => {
         <AboutSection />
         <ServicesSection />
         <DestinationsSection />
+        <TeamSection />
         <ContactSection />
       </main>
       <Footer />
