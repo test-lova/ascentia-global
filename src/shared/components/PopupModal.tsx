@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { homeService } from '@/services/http/apiService';
 import { Popup } from '@/shared/types/api';
 import { Loader2 } from 'lucide-react';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 
 interface PopupModalProps {
   open: boolean;
@@ -49,7 +50,11 @@ export function PopupModal({ open, onOpenChange }: PopupModalProps) {
 
   return (
     <Dialog open={open && !!popup} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-2 border-border shadow-2xl bg-background">
+        <VisuallyHidden>
+          <DialogTitle>Announcement</DialogTitle>
+          <DialogDescription>Special announcement or promotion</DialogDescription>
+        </VisuallyHidden>
         {loading ? (
           <div className="flex items-center justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
