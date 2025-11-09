@@ -62,23 +62,23 @@ export function AboutSection() {
   }
 
   return (
-    <section id="about" ref={ref} className="py-24 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section id="about" ref={ref} className="py-12 sm:py-16 md:py-24 bg-muted/30">
+      <div className="container mx-auto px-4 sm:px-6">{" "}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             {t('about.title')}
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             {t('about.subtitle')}
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center mb-12 sm:mb-16">{" "}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -122,7 +122,7 @@ export function AboutSection() {
         </div>
 
         {/* Mission, Vision, Values */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">{" "}
           {features.map((feature, index) => (
             <motion.div
               key={index}

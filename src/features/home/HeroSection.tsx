@@ -7,13 +7,13 @@ export function HeroSection() {
   const { t } = useTranslation();
 
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+    <section id="hero" className="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 px-4 sm:px-6">
       {/* Gradient Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/10" />
       
       {/* Animated Circles */}
       <motion.div
-        className="absolute top-20 right-20 w-72 h-72 rounded-full bg-primary/10 blur-3xl"
+        className="absolute top-10 sm:top-20 -right-20 sm:right-20 w-40 h-40 sm:w-72 sm:h-72 rounded-full bg-primary/10 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
           rotate: [0, 90, 0],
@@ -25,7 +25,7 @@ export function HeroSection() {
         }}
       />
       <motion.div
-        className="absolute bottom-20 left-20 w-96 h-96 rounded-full bg-accent/10 blur-3xl"
+        className="absolute bottom-10 sm:bottom-20 -left-20 sm:left-20 w-48 h-48 sm:w-96 sm:h-96 rounded-full bg-accent/10 blur-3xl"
         animate={{
           scale: [1, 1.3, 1],
           rotate: [0, -90, 0],
@@ -54,14 +54,14 @@ export function HeroSection() {
               </span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl font-bold mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
               {t('hero.title')}{' '}
               <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 {t('hero.titleHighlight')}
               </span>
             </h1>
 
-            <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto px-4">
               {t('hero.subtitle')}
             </p>
 
@@ -85,7 +85,7 @@ export function HeroSection() {
           </motion.div>
 
           {/* Floating Cards */}
-          <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="mt-12 sm:mt-16 md:mt-20 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 px-4">{" "}
             {[
               { icon: '🎓', title: '500+', subtitle: 'Students Placed' },
               { icon: '🌍', title: '25+', subtitle: 'Countries' },

@@ -70,23 +70,23 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" ref={ref} className="py-24">
-      <div className="container mx-auto px-4">
+    <section id="contact" ref={ref} className="py-12 sm:py-16 md:py-24">
+      <div className="container mx-auto px-4 sm:px-6">{" "}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-12 sm:mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             {t('contact.title')}
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             {t('contact.subtitle')}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 max-w-6xl mx-auto">{" "}
           {/* Contact Information */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}

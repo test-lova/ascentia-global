@@ -48,8 +48,8 @@ export default function About() {
     <div className="min-h-screen bg-background">
       <Navbar />
       
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+      <main className="pt-20 sm:pt-24 pb-12 sm:pb-16">
+        <div className="container mx-auto px-4 sm:px-6">{" "}
           {about && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -66,8 +66,8 @@ export default function About() {
               </div>
             )}
             
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">{t('about.title')}</h1>
-            <div className="prose prose-lg max-w-none">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">{t('about.title')}</h1>
+            <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none">{" "}
               {about.story && (
                 <div className="mb-8">
                   <h2 className="text-2xl font-semibold mb-4">Our Story</h2>
@@ -99,11 +99,11 @@ export default function About() {
           )}
 
           {/* Team Section */}
-          <div className="mt-20">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          <div className="mt-12 sm:mt-16 md:mt-20">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12">
               {t('team.title')}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">{" "}
               {team.map((member, index) => (
                 <motion.div
                   key={member.id}
